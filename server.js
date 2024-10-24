@@ -22,7 +22,7 @@ const scriptCode = function(webName) {
 
     fs.writeFileSync(path.join(folderName, fileName), `Website: ${webName}`, 'utf-8');
 
-    const command = `wpscan --url "${webName}" --enumerate ap >> "${path.join(folderName, fileName)}"`;
+    const command = `sudo wpscan --url "${webName}" --enumerate ap >> "${path.join(folderName, fileName)}"`;
     console.log(`Executing command: ${command}`);
     console.log(`Clean web name: ${fileName}`);
 
