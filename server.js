@@ -1,29 +1,46 @@
-const {exec} = require('child_process')
-const { error } = require('console')
-const fs = require('fs')
-const { stdout, stderr } = require('process')
+const { exec } = require('child_process');
+const fs = require('fs');
+const path = require('path');
 
+const webNames = fs.readFileSync('./filewebname.txt', 'utf-8').split('\n').filter(Boolean);
 
-function readWEbName(filePath) {
-    return fs.readFileSync(filePath, 'utf-8').split('\n').filter(Boolean)
+const cleanedWebNames = webNames.map(name => name.trim());
+
+const folderName = 'recon_output';
+
+if (!fs.existsSync(folderName)) {
+    fs.mkdirSync(folderName);
 }
 
-function webScannerWordpress(webName) {
-    exec(`wpscan --url ${webName} ==enumerate -p >> ${webName}.txt`, (error, stdout, stderr) => {
+const scriptCode = function(webName) {
+    const cleanWebName = webName.replace(/^https?:\/\//, '');
+    const portMatch = cleanWebName.match(/:(\d+)/);
+    const host = portMatch ? cleanWebName.replace(/:\d+/, '') : cleanWebName;
+    const port = portMatch ? portMatch[1] : null;
+
+    const fileName = port ? `${host}.p${port}.txt` : `${host}.txt`;
+
+    fs.writeFileSync(path.join(folderName, fileName), `Website: ${webName}`, 'utf-8');
+
+    const command = `wpscan --url "${webName}" --enumerate ap >> "${path.join(folderName, fileName)}"`;
+    console.log(`Executing command: ${command}`);
+    console.log(`Clean web name: ${fileName}`);
+
+    exec(command, { shell: true }, (error, stdout, stderr) => {
         if (error) {
-            console.error('Error cant execute code')
-            return
+            console.error(`Error executing command: ${error.message}`);
+            return;
         }
         if (stderr) {
-            console.error(`stderr: ${stderr}`)
-            return
+            console.error(`stderr: ${stderr}`);
+            return;
         }
-        console.log(`Output: ${stdout}`)
-    })
+        console.log(`Output: ${stdout}`);
+    });
 }
 
-const webName = readWEbName('./filewebname.txt')
+cleanedWebNames.forEach(webName => {
+    scriptCode(webName);
+});
 
-webName.forEach(webName => {
-    webScannerWordpress(webName)
-})
+console.log(`File telah dibuat di dalam folder "${folderName}" dan wpscan dijalankan untuk setiap nama web.`);
