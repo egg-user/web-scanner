@@ -43,4 +43,4 @@ cleanedWebNames.forEach(webName => {
     scriptCode(webName);
 });
 
-console.log(`File telah dibuat di dalam folder "${folderName}" dan wpscan dijalankan untuk setiap nama web.`);
+console.log(`File have been saved in folder "${folderName}".`);
