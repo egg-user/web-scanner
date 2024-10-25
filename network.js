@@ -2,6 +2,19 @@ const inquirer = require('inquirer');
 const { exec } = require('child_process');
 const fs = require('fs')
 
+const checkFileExists = (filePath) => {
+    return new Promise((resolve, reject) => {
+        fs.access(filePath, fs.constants.F_OK, (err) => {
+            if (err) {
+                reject(new Error(`File ${filePath} does not exists.`))
+            }else {
+                resolve
+            }
+        })
+    })
+}
+
+
 const networkScan = function() {
     const questions = [
         {
@@ -39,7 +52,7 @@ const networkScan = function() {
                 // Capture ports associated with the current IP
                 const portMatch = line.match(/^(\d+)\/tcp\s+open|filtered\s+\w+/);
                 if (portMatch && currentIP) {
-                    ipPorts.push(`${currentIP}:${portMatch[1]}`); // Add IP:PORT to the array
+                    ipPorts.push(`http://${currentIP}:${portMatch[1]}`); // Add IP:PORT to the array
                 }
             });
 
@@ -61,4 +74,4 @@ const networkScan = function() {
     });
 };
 
-module.exports = networkScan
+module.exports = networkScan, checkFileExists
