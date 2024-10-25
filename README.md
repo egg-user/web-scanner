@@ -1,2 +1,2 @@
 ﻿# web-scanner
-Automatic scan of WordPress list in filewebname.txt and the results will be saved in recon_output
+Automatic scanning network to find active host then search for wordpress service that running and find vulnerability, the result will saved in a different folder with the file name following the active wordpress hostname
