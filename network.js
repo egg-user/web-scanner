@@ -61,4 +61,4 @@ const networkScan = function() {
     });
 };
 
-networkScan();
+module.exports = networkScan
