@@ -23,7 +23,6 @@ const networkScan = async function() {
         });
     };
 
-    // Tunggu hingga checkFileExists selesai
     await checkFileExists('scan_network_result.txt');
 
     const questions = [

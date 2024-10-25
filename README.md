@@ -1,2 +1,2 @@
 ﻿# web-scanner
-Automatic scanning network to find active host then search for wordpress service that running and find vulnerability, the result will saved in a different folder with the file name following the active wordpress hostname
+Automatic scan of the network to find active hosts then look for running wordpress services and find vulnerabilities, the results will be saved in a different folder with the file name following the name of the active wordpress host
