@@ -1,9 +1,31 @@
 const inquirer = require('inquirer');
 const { exec } = require('child_process');
-const fs = require('fs')
+const fs = require('fs');
 
+const networkScan = async function() {
+    const checkFileExists = (filePath) => {
+        return new Promise((resolve, reject) => {
+            fs.access(filePath, fs.constants.F_OK, (err) => {
+                if (err) {
+                    // File does not exist, create it
+                    fs.writeFile(filePath, '', (writeErr) => {
+                        if (writeErr) {
+                            reject(new Error(`Unable to create file ${filePath}: ${writeErr.message}`));
+                        } else {
+                            console.log(`File ${filePath} created.`);
+                            resolve();
+                        }
+                    });
+                } else {
+                    resolve(); // File exists, proceed
+                }
+            });
+        });
+    };
 
-const networkScan = function() {
+    // Tunggu hingga checkFileExists selesai
+    await checkFileExists('scan_network_result.txt');
+
     const questions = [
         {
             type: 'input',
@@ -47,12 +69,12 @@ const networkScan = function() {
             if (ipPorts.length > 0) {
                 console.log('Found IPs and ports:');
                 ipPorts.forEach(match => console.log(match));
-                fs.writeFile(`scan_network_result.txt`, ipPorts.join('\n'), (error)=> {
+                fs.writeFile(`scan_network_result.txt`, ipPorts.join('\n'), (error) => {
                     if (error) {
-                        console.error('error writing to file:', error)
+                        console.error('Error writing to file:', error);
                     }
-                    console.log('Result saved to scan_network_result.txt')
-                })
+                    console.log('Result saved to scan_network_result.txt');
+                });
             } else {
                 console.log('No IPs and ports found.');
             }
@@ -62,4 +84,5 @@ const networkScan = function() {
     });
 };
 
-module.exports = networkScan
+
+module.exports = networkScan;
