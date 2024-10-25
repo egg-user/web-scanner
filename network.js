@@ -2,18 +2,6 @@ const inquirer = require('inquirer');
 const { exec } = require('child_process');
 const fs = require('fs')
 
-const checkFileExists = (filePath) => {
-    return new Promise((resolve, reject) => {
-        fs.access(filePath, fs.constants.F_OK, (err) => {
-            if (err) {
-                reject(new Error(`File ${filePath} does not exists.`))
-            }else {
-                resolve
-            }
-        })
-    })
-}
-
 
 const networkScan = function() {
     const questions = [
@@ -74,4 +62,4 @@ const networkScan = function() {
     });
 };
 
-module.exports = networkScan, checkFileExists
+module.exports = networkScan
